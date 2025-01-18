@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ArrBeeSee-ing?",
+  title: "MyBank",
   description: "Type stuff ya hearrrr",
 };
 
