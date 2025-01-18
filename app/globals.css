@@ -6,3 +6,8 @@
     width: 80%; /* Adjust the width as needed */
     margin: 0 auto; /* Center the navbar */
   }
+
+.sizeshrink {
+    width: 100%; /* Adjust the width as needed */
+    height: 50%; /* Adjust the height as needed */
+  }
