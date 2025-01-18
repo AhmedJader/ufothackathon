@@ -16,13 +16,19 @@ export default async function handler(req, res) {
         model: 'command-light',
         messages: [
           {
+            role: 'system', // Add system role for strict instructions
+            content: `You are a Support bot for a bank called "MyBank", and you are 
+            ONLY tasked with assisting users with basic support regarding their bank accounts. You CANNOT PROVIDE ANY INFO
+            OUTSIDE OF THE USERS BANK ACCOUNT. IF the QUERY is IRRELEVANT, please respond with "I am sorry, but I cannot assist you with that query."
+            If the QUERY is RELEVANT, please respond with the following format:
+            "hello, this is MyBank Support. How can I help you today?"`,
+          },
+          {
             role: 'user',
             content: message,
           },
         ],
       });
-
-      //console.log('Cohere API response:', response.message.content[0]?.text);
 
       res.status(200).json({ content: response.message.content[0]?.text || 'No response from Cohere API' });
     } catch (error) {
