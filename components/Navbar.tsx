@@ -4,34 +4,39 @@ import React from "react";
 
 const Navbar = ({ userId }: { userId: string | null }) => {
   return (
-    <div className="bg-blue-600 rounded-b-xl text-white justify-center">
-      <ul className="flex justify-between py-4 px-6">
+    <div className="bg-blue-600 rounded-b-xl text-white navbar-container"> {/* Added max-width */}
+      <ul className="flex justify-between py-2 px-4 text-sm items-center w-full">
+        {/* Left Section */}
         <div>
           <Link href="/">
-            <li>Home</li>
+            <li className="hover:underline">Home</li>
           </Link>
         </div>
-        <div className="flex items-center">
+
+        {/* Center Section */}
+        <div>
           <Link href="/client">
-            <li>Client Page</li>
+            <li className="hover:underline">Client Page</li>
           </Link>
         </div>
-        <div className="flex gap-6 items-center">
+
+        {/* Right Section */}
+        <div className="flex gap-4 items-center">
           {!userId ? (
             <>
               <Link href="/sign-in">
-                <li>Login</li>
+                <li className="hover:underline">Login</li>
               </Link>
               <Link href="/sign-up">
-                <li>Sign Up</li>
+                <li className="hover:underline">Sign Up</li>
               </Link>
             </>
           ) : (
             <>
               <Link href="/profile">
-                <li>Profile</li>
+                <li className="hover:underline">Profile</li>
               </Link>
-              <li className="flex items-center">
+              <li>
                 <UserButton />
               </li>
             </>

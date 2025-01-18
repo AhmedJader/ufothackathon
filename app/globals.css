@@ -2,3 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+.navbar-container {
+    width: 80%; /* Adjust the width as needed */
+    margin: 0 auto; /* Center the navbar */
+  }
