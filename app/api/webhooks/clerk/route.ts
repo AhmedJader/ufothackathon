@@ -5,82 +5,86 @@ import { createUser } from '@/actions/user.action'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
-  const SIGNING_SECRET = process.env.SIGNING_SECRET;
+  const SIGNING_SECRET = process.env.SIGNING_SECRET
 
   if (!SIGNING_SECRET) {
-    throw new Error('Error: Please add SIGNING_SECRET from Clerk Dashboard to .env or .env.local');
+    throw new Error('Error: Please add SIGNING_SECRET from Clerk Dashboard to .env or .env.local')
   }
 
-  const startTime = Date.now();
+  // Create new Svix instance with secret
+  const wh = new Webhook(SIGNING_SECRET)
 
-  // Step 1: Create new Svix instance with secret
-  const wh = new Webhook(SIGNING_SECRET);
+  // Get headers
+  const headerPayload = await headers()
+  const svix_id = headerPayload.get('svix-id')
+  const svix_timestamp = headerPayload.get('svix-timestamp')
+  const svix_signature = headerPayload.get('svix-signature')
 
-  // Step 2: Get headers
-  const headerPayload = await headers();
-  const svix_id = headerPayload.get('svix-id');
-  const svix_timestamp = headerPayload.get('svix-timestamp');
-  const svix_signature = headerPayload.get('svix-signature');
-
+  // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response('Error: Missing Svix headers', { status: 400 });
+    return new Response('Error: Missing Svix headers', {
+      status: 400,
+    })
   }
 
-  // Step 3: Parse the request body
-  const payloadStart = Date.now();
-  const payload = await req.json();
-  const body = JSON.stringify(payload);
-  console.log(`Parsing request body took ${Date.now() - payloadStart}ms`);
+  // Get body
+  const payload = await req.json()
+  const body = JSON.stringify(payload)
 
-  let evt: WebhookEvent;
+  let evt: WebhookEvent
 
-  // Step 4: Verify payload with headers
-  const verificationStart = Date.now();
+  // Verify payload with headers
   try {
     evt = wh.verify(body, {
       'svix-id': svix_id,
       'svix-timestamp': svix_timestamp,
       'svix-signature': svix_signature,
-    }) as WebhookEvent;
-    console.log(`Payload verification took ${Date.now() - verificationStart}ms`);
+    }) as WebhookEvent
   } catch (err) {
-    console.error('Error: Could not verify webhook:', err);
-    return new Response('Error: Verification error', { status: 400 });
+    console.error('Error: Could not verify webhook:', err)
+    return new Response('Error: Verification error', {
+      status: 400,
+    })
   }
 
-  // Step 5: Process the payload
-  const processingStart = Date.now();
-  const { id, email_addresses, image_url, first_name, last_name, username } = evt.data;
+  // Do something with payload
+  // For this guide, log payload to console
+  const { id } = evt.data
+  const eventType = evt.type
 
-  const user = {
-    clerkId: id,
-    email: email_addresses[0]?.email_address || '',
-    username: username || null,
-    photo: image_url || '',
-    firstName: first_name || '',
-    lastName: last_name || '',
-  };
+  if(eventType === 'user.created'){
+    // Do something with the user created event
+    const {id, email_addresses, image_url, first_name, last_name, username} //follows mongo db schema
+    = evt.data;
 
-  console.log('User object created:', user);
-  console.log(`Payload processing took ${Date.now() - processingStart}ms`);
+    const user = {
+        clerkId: id,
+        email: email_addresses[0].email_address,
+        username: username!,
+        photo: image_url!,
+        firstName: first_name,
+        lastName: last_name
+    }
 
-  // Step 6: Save to MongoDB
-  const dbStart = Date.now();
-  const newUser = await createUser(user);
-  console.log(`Database operation took ${Date.now() - dbStart}ms`);
+    console.log(user);
 
-  if (newUser) {
-    const clerkUpdateStart = Date.now();
-    const client = await clerkClient();
-    await client.users.updateUser(id, {
-      publicMetadata: {
-        userId: newUser._id,
-      },
-    });
-    console.log(`Clerk metadata update took ${Date.now() - clerkUpdateStart}ms`);
+    const newUser = await createUser(user);
+
+    if (newUser) {
+        const client = await clerkClient();
+        await client.users.updateUser(id, {
+          publicMetadata: {
+            userId: newUser._id,
+          },
+        });
+      }
+
+    return NextResponse.json({
+      message: 'User created',
+    user: newUser});
   }
+  console.log(`Received webhook with ID ${id} and event type of ${eventType}`)
+  console.log('Webhook payload:', body)
 
-  console.log(`Total operation time: ${Date.now() - startTime}ms`);
-
-  return new Response('Webhook received', { status: 200 });
+  return new Response('Webhook received', { status: 200 })
 }
