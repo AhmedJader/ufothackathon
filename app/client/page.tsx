@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import Hero from "@/components/chatbot.jsx";
+import Navbar from "@/components/Navbar"; // Import Navbar component
 
 const ClientPage = () => {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -22,6 +23,9 @@ const ClientPage = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 text-white">
+      {/* Navbar */}
+      <Navbar userId={user.id} />
+
       {/* Main Content */}
       <main className="flex flex-1 items-center justify-center text-center px-4">
         {/* Animated Welcome Message */}
