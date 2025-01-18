@@ -32,25 +32,25 @@ const Hero = () => {
 
   return (
     <div
-      className="fixed bottom-4 right-4 bg-white text-black shadow-lg rounded-lg w-80"
+      className="fixed bottom-4 right-4 bg-white text-black shadow-lg rounded-lg w-64" // Reduced width
     >
       {/* Header for the chat tool */}
       <div
-        className="bg-blue-600 text-white px-4 py-2 rounded-t-lg cursor-pointer"
+        className="bg-blue-600 text-white px-3 py-1 rounded-t-lg cursor-pointer" // Reduced padding
         onClick={() => setIsMinimized(!isMinimized)} // Toggle the minimized state
       >
-        <h1 className="text-lg font-semibold">
+        <h1 className="text-sm font-semibold"> {/* Reduced font size */}
           {isMinimized ? "Chat (Click to Expand)" : "MyBank Support"}
         </h1>
       </div>
 
       {/* Show content only if not minimized */}
       {!isMinimized && (
-        <div className="flex flex-col h-96">
+        <div className="flex flex-col h-72"> {/* Reduced height */}
           {/* Container to display chat messages */}
-          <div className="flex-1 p-4 overflow-y-auto">
+          <div className="flex-1 p-3 overflow-y-auto"> {/* Reduced padding */}
             {messages.map((msg, index) => (
-              <div key={index} className="mb-2">
+              <div key={index} className="mb-2 text-sm"> {/* Reduced font size */}
                 <strong className="block">
                   {msg.role === "user" ? "You" : "MyBank Support"}:
                 </strong>
@@ -66,11 +66,11 @@ const Hero = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Enter Message..."
-              className="flex-1 px-3 py-2 border rounded-lg"
+              className="flex-1 px-3 py-1 border rounded-lg text-sm" // Reduced padding and font size
             />
             <button
               onClick={handleSendMessage}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm" // Reduced padding and font size
             >
               Send
             </button>
