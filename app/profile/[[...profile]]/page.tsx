@@ -17,8 +17,8 @@ const Profile = async () => {
     const user = await currentUser();
 
     return (
-        <div className='flex flex-col items-center justify-center h-full mt-8'>
-            <h1 className='text-2xl text-center'>Welcome {user?.username || "User"}</h1>
+        <div className='flex flex-col items-center justify-center h-full mt-2'>
+            <h1 className='text-2xl text-center mb-5'>Welcome {user?.firstName || "User"}</h1>
             <UserProfile />
         </div>
     );
