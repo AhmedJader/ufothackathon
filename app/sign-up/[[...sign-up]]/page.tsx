@@ -1,4 +1,4 @@
-import { SignIn, SignUp } from '@clerk/nextjs'
+import { SignUp } from '@clerk/nextjs'
 import Image from 'next/image'
 import logo from "@/public/AI_Generated_Logo_2025-01-18_676a4f25-bc8c-4d7c-90b7-01823d67f9bd.png"
 
