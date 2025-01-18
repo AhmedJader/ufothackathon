@@ -4,46 +4,58 @@ import React from "react";
 
 const Navbar = ({ userId }: { userId: string | null }) => {
   return (
-    <div className="bg-blue-600 rounded-b-xl text-white navbar-container"> {/* Added max-width */}
-      <ul className="flex justify-between py-2 px-4 text-sm items-center w-full">
-        {/* Left Section */}
-        <div>
-          <Link href="/">
-            <li className="hover:underline">Home</li>
-          </Link>
-        </div>
+    <header className="bg-gradient-to-r from-blue-700 via-indigo-800 to-purple-700 shadow-md fixed top-0 left-0 w-full z-50">
+      <div className="max-w-7xl mx-auto flex justify-between items-center py-4 px-8">
+        {/* Left Section: Branding */}
+        <h1 className="text-2xl font-bold text-white tracking-wide hover:scale-105 transition-transform">
+          MyBank
+        </h1>
 
-        {/* Center Section */}
-        <div>
-          <Link href="/client">
-            <li className="hover:underline">Client Page</li>
+        {/* Center Section: Navigation Links */}
+        <nav className="flex space-x-6">
+          <Link
+            href="/"
+            className="text-white text-lg font-medium hover:text-indigo-300 hover:underline transition duration-200"
+          >
+            Home
           </Link>
-        </div>
+          <Link
+            href="/client"
+            className="text-white text-lg font-medium hover:text-indigo-300 hover:underline transition duration-200"
+          >
+            Client Page
+          </Link>
+          <Link
+            href="/profile"
+            className="text-white text-lg font-medium hover:text-indigo-300 hover:underline transition duration-200"
+          >
+            Profile
+          </Link>
+        </nav>
 
-        {/* Right Section */}
+        {/* Right Section: User Authentication */}
         <div className="flex gap-4 items-center">
           {!userId ? (
             <>
-              <Link href="/sign-in">
-                <li className="hover:underline">Login</li>
+              <Link
+                href="/sign-in"
+                className="text-white text-lg font-medium hover:text-indigo-300 hover:underline transition duration-200"
+              >
+                Login
               </Link>
-              <Link href="/sign-up">
-                <li className="hover:underline">Sign Up</li>
+              <Link
+                href="/sign-up"
+                className="text-white text-lg font-medium hover:text-indigo-300 hover:underline transition duration-200"
+              >
+                Sign Up
               </Link>
             </>
           ) : (
-            <>
-              <Link href="/profile">
-                <li className="hover:underline">Profile</li>
-              </Link>
-              <li>
-                <UserButton />
-              </li>
-            </>
+            <UserButton />
           )}
         </div>
-      </ul>
-    </div>
+      </div>
+    </header>
   );
 };
 
