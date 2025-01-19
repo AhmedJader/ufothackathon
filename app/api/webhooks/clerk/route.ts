@@ -54,7 +54,7 @@ export async function POST(req: Request) {
 
   if(eventType === 'user.created'){
     // Do something with the user created event
-    const {id, email_addresses, image_url, first_name, last_name, username} //follows mongo db schema
+    const {id, email_addresses, first_name, last_name, username} //follows mongo db schema
     = evt.data;
 
     const user = {

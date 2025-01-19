@@ -13,10 +13,6 @@ const userSchema = new Schema({
     username: {
         type: String,
     },
-    photo: {
-        type: String,
-        required: true,  // Fixed typo here
-    },
     firstName: {
         type: String,
     },
